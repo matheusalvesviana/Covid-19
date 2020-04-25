@@ -19,9 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun bind() {
         pb_circular.visibility = View.VISIBLE
-        val dateFormat = SimpleDateFormat("HH:mm:ss", Locale("pt", "BR"))
-
-        tv_date.text = dateFormat.format(Calendar.getInstance().time).toString()
     }
 
     private fun createMatrix() {
