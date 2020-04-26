@@ -71,20 +71,26 @@ class MainActivity : AppCompatActivity() {
         refreshMatrix()
         pb_circular.visibility = View.GONE
     }
-    private fun applyPeoplePosition(peoples: List<People>){
+
+    private fun applyPeoplePosition(peoples: List<People>) {
         peoples.map { matrix[it.row][it.column] = if (it.isInfected) 2 else 1 }
     }
 
-    private fun applyContamination(){
-         for (i in 0 until healthyPeople.size){
-             infectedPeople.map {
-                 if (healthyPeople[i].row == it.row && healthyPeople[i].column == it.column-1 ||
-                     healthyPeople[i].row == it.row && healthyPeople[i].column == it.column+1||
-                     healthyPeople[i].column == it.column && healthyPeople[i].row == it.row-1 ||
-                     healthyPeople[i].column == it.column && healthyPeople[i].row == it.row+1){
-                 }
-             }
-         }
+    private fun applyContamination() {
+        for (i in 0 until healthyPeople.size) {
+            infectedPeople.map {
+                if (healthyPeople[i].row == it.row && healthyPeople[i].column == it.column - 1 ||
+                    healthyPeople[i].row == it.row && healthyPeople[i].column == it.column + 1 ||
+                    healthyPeople[i].column == it.column && healthyPeople[i].row == it.row - 1 ||
+                    healthyPeople[i].column == it.column && healthyPeople[i].row == it.row + 1
+                ) {
+                    healthyPeople[i].isInfected = true
+                }
+            }
+        }
+        val newInfecteds = healthyPeople.filter { it.isInfected }
+        infectedPeople.addAll(newInfecteds)
+        healthyPeople.removeAll(newInfecteds)
     }
 
     private fun refreshMatrix() {
