@@ -75,6 +75,18 @@ class MainActivity : AppCompatActivity() {
         peoples.map { matrix[it.row][it.column] = if (it.isInfected) 2 else 1 }
     }
 
+    private fun applyContamination(){
+         for (i in 0 until healthyPeople.size){
+             infectedPeople.map {
+                 if (healthyPeople[i].row == it.row && healthyPeople[i].column == it.column-1 ||
+                     healthyPeople[i].row == it.row && healthyPeople[i].column == it.column+1||
+                     healthyPeople[i].column == it.column && healthyPeople[i].row == it.row-1 ||
+                     healthyPeople[i].column == it.column && healthyPeople[i].row == it.row+1){
+                 }
+             }
+         }
+    }
+
     private fun refreshMatrix() {
         tv_matrix.text = ""
         for (i in matrix.indices) {
@@ -104,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                 it.column = Random().nextInt(10)
                 it.row = Random().nextInt(10)
             }
+            applyContamination()
             applyPeoplePosition(infectedPeople)
             applyPeoplePosition(healthyPeople)
             refreshMatrix()
