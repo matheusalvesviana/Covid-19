@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     private var healthyPeople: MutableList<People> = mutableListOf()
     private var matrix = Array(10) { IntArray(10) }
     private var counter = 0
-    private var peopleInfected = false
     private var randomValue = Random().nextInt(3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +40,22 @@ class MainActivity : AppCompatActivity() {
             }
         })
         button_run_cycle.setOnClickListener { runCycle(Integer.parseInt(cycles)) }
+        button_reset.setOnClickListener {
+            infectedPeople = mutableListOf()
+            recoveredPeople = mutableListOf()
+            healthyPeople = mutableListOf()
+            matrix = Array(10) { IntArray(10) }
+            counter = 0
+            randomValue = Random().nextInt(3)
+            createMatrix()
+        }
+        button_status.setOnClickListener {
+            Toast.makeText(
+                this,
+                "Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun createMatrix() {
@@ -50,21 +65,16 @@ class MainActivity : AppCompatActivity() {
             val randRow = Random().nextInt(matrix.size)
             val randColumn = Random().nextInt(matrix.size)
             if (matrix[randRow][randColumn] == 0) {
-                if (!peopleInfected && randomValue == 2) {
+                if (randomValue == 2) {
                     matrix[randRow][randColumn] = 2
-                    people = People(randRow, randColumn, true)
+                    people = People(randRow, randColumn, true, 0)
                     infectedPeople.add(people)
-                    peopleInfected = true
                 } else if (randomValue == 1) {
-                    people = People(randRow, randColumn, false)
+                    people = People(randRow, randColumn, false, 0)
                     healthyPeople.add(people)
                     matrix[randRow][randColumn] = 1
                 }
-                randomValue = if (peopleInfected) {
-                    Random().nextInt(2)
-                } else {
-                    Random().nextInt(3)
-                }
+                randomValue = Random().nextInt(3)
                 counter++
             }
         }
@@ -89,8 +99,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         val newInfecteds = healthyPeople.filter { it.isInfected }
+        val newHealthys = infectedPeople.filter { !it.isInfected }
         infectedPeople.addAll(newInfecteds)
         healthyPeople.removeAll(newInfecteds)
+        healthyPeople.addAll(newHealthys)
+        infectedPeople.removeAll(newHealthys)
     }
 
     private fun refreshMatrix() {
@@ -98,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         for (i in matrix.indices) {
             for (element in matrix[i]) {
                 if (element != 0) tv_matrix.text = tv_matrix.text.toString() + " $element "
-                else tv_matrix.text = tv_matrix.text.toString() + " X "
+                else tv_matrix.text = tv_matrix.text.toString() + " 0 "
 
             }
             tv_matrix.text = tv_matrix.text.toString() + "\n"
@@ -107,15 +120,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun runCycle(cycles: Int) {
         matrix = Array(10) { IntArray(10) }
-        Toast.makeText(
-            this,
-            "Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}",
-            Toast.LENGTH_LONG
-        ).show()
         for (i in 0 until cycles) {
             infectedPeople.map {
+                it.infectedTime++
                 it.column = Random().nextInt(10)
                 it.row = Random().nextInt(10)
+                if (it.infectedTime > 4) {
+                    it.isInfected = false
+                    it.infectedTime = 0
+                }
             }
 
             healthyPeople.map {
