@@ -13,6 +13,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private var infectedPeople: MutableList<People> = mutableListOf()
     private var recoveredPeople: MutableList<People> = mutableListOf()
+    private var deathPeople: MutableList<People> = mutableListOf()
     private var healthyPeople: MutableList<People> = mutableListOf()
     private var matrix = Array(10) { IntArray(10) }
     private var counter = 0
@@ -52,7 +53,8 @@ class MainActivity : AppCompatActivity() {
         button_status.setOnClickListener {
             Toast.makeText(
                 this,
-                "Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}",
+                "Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size} \n" +
+                        "Pessoas mortas: ${deathPeople.size}",
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -104,6 +106,8 @@ class MainActivity : AppCompatActivity() {
         healthyPeople.removeAll(newInfecteds)
         healthyPeople.addAll(newHealthys)
         infectedPeople.removeAll(newHealthys)
+        healthyPeople.removeAll(deathPeople)
+        infectedPeople.removeAll(deathPeople)
     }
 
     private fun refreshMatrix() {
@@ -126,8 +130,20 @@ class MainActivity : AppCompatActivity() {
                 it.column = Random().nextInt(10)
                 it.row = Random().nextInt(10)
                 if (it.infectedTime > 4) {
-                    it.isInfected = false
-                    it.infectedTime = 0
+                    if (!it.isGroupOfRisk) {
+                        it.isInfected = false
+                        it.infectedTime = 0
+                        recoveredPeople.add(it)
+                    } else {
+                        it.isInfected = false
+                        it.infectedTime = 0
+                        deathPeople.add(it)
+                        Toast.makeText(
+                            this,
+                            "Morreu uma pessoa",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
 
