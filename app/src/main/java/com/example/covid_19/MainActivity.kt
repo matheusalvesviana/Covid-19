@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity() {
         button_status.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Informação")
-            builder.setMessage("Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}  \nPessoas mortas: ${deathPeople.size}")
+            builder.setMessage("Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size} \n" +
+                    "Pessoas recuperadas: ${recoveredPeople.size}  \nPessoas mortas: ${deathPeople.size}")
             builder.setPositiveButton("OK") { _, _ -> }
             val dialog: AlertDialog = builder.create()
             dialog.show()
