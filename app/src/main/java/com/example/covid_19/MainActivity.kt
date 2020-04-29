@@ -92,7 +92,11 @@ class MainActivity : AppCompatActivity() {
                 if (healthyPeople[i].row == it.row && healthyPeople[i].column == it.column - 1 ||
                     healthyPeople[i].row == it.row && healthyPeople[i].column == it.column + 1 ||
                     healthyPeople[i].column == it.column && healthyPeople[i].row == it.row - 1 ||
-                    healthyPeople[i].column == it.column && healthyPeople[i].row == it.row + 1
+                    healthyPeople[i].column == it.column && healthyPeople[i].row == it.row + 1 ||
+                    healthyPeople[i].column == it.column - 1 && healthyPeople[i].row == it.row - 1 ||
+                    healthyPeople[i].column == it.column - 1 && healthyPeople[i].row == it.row + 1 ||
+                    healthyPeople[i].column == it.column + 1 && healthyPeople[i].row == it.row - 1 ||
+                    healthyPeople[i].column == it.column + 1 && healthyPeople[i].row == it.row + 1
                 ) {
                     healthyPeople[i].isInfected = true
                 }
@@ -111,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         for (i in matrix.indices) {
             for (element in matrix[i]) {
                 if (element != 0) tv_matrix.text = tv_matrix.text.toString() + " $element "
-                else tv_matrix.text = tv_matrix.text.toString() + " 0 "
+                else tv_matrix.text = tv_matrix.text.toString() + " X "
 
             }
             tv_matrix.text = tv_matrix.text.toString() + "\n"
