@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.covid_19.objects.People
 import kotlinx.android.synthetic.main.activity_main.*
@@ -51,12 +52,12 @@ class MainActivity : AppCompatActivity() {
             createMatrix()
         }
         button_status.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size} \n" +
-                        "Pessoas mortas: ${deathPeople.size}",
-                Toast.LENGTH_LONG
-            ).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Informação")
+            builder.setMessage("Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}  \nPessoas mortas: ${deathPeople.size}")
+            builder.setPositiveButton("OK") { _, _ -> }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
     }
 
