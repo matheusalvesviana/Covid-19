@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.covid_19.objects.People
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,6 +14,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private var infectedPeople: MutableList<People> = mutableListOf()
     private var recoveredPeople: MutableList<People> = mutableListOf()
+    private var deathPeople: MutableList<People> = mutableListOf()
     private var healthyPeople: MutableList<People> = mutableListOf()
     private var matrix = Array(10) { IntArray(10) }
     private var counter = 0
@@ -50,11 +52,12 @@ class MainActivity : AppCompatActivity() {
             createMatrix()
         }
         button_status.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}",
-                Toast.LENGTH_LONG
-            ).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Informação")
+            builder.setMessage("Pessoas saudaveis: ${healthyPeople.size} \nPessoas infectadas: ${infectedPeople.size}  \nPessoas mortas: ${deathPeople.size}")
+            builder.setPositiveButton("OK") { _, _ -> }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
     }
 
@@ -108,6 +111,8 @@ class MainActivity : AppCompatActivity() {
         healthyPeople.removeAll(newInfecteds)
         healthyPeople.addAll(newHealthys)
         infectedPeople.removeAll(newHealthys)
+        healthyPeople.removeAll(deathPeople)
+        infectedPeople.removeAll(deathPeople)
     }
 
     private fun refreshMatrix() {
@@ -130,8 +135,20 @@ class MainActivity : AppCompatActivity() {
                 it.column = Random().nextInt(10)
                 it.row = Random().nextInt(10)
                 if (it.infectedTime > 4) {
-                    it.isInfected = false
-                    it.infectedTime = 0
+                    if (!it.isGroupOfRisk) {
+                        it.isInfected = false
+                        it.infectedTime = 0
+                        recoveredPeople.add(it)
+                    } else {
+                        it.isInfected = false
+                        it.infectedTime = 0
+                        deathPeople.add(it)
+                        Toast.makeText(
+                            this,
+                            "Morreu uma pessoa",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
 
