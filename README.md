@@ -4,4 +4,4 @@ This is a example project requested by my teacher Dirceu Filho, I'm a student fr
 # Prints with the app working
 ![Screenshot_1588119987](https://user-images.githubusercontent.com/35138215/80550727-61acc100-8997-11ea-984a-49d24779bd2d.png)
 
-![Screenshot_1588119998](https://user-images.githubusercontent.com/35138215/80550782-8e60d880-8997-11ea-9f15-bfad17d8478c.png)
+![Screenshot_1588803455](https://user-images.githubusercontent.com/35138215/81234009-4b71b700-8fce-11ea-82b6-b0fdf33c081c.png)
